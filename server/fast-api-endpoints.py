@@ -8,7 +8,8 @@ stub = modal.Stub("zoom")
 
 web_image = modal.Image.debian_slim()
 
-cur_num = None
+cache = {}
+cache['num'] = None
 
 
 def score_func():
@@ -33,16 +34,17 @@ async def cur_score():
 @web_app.get("/get_score")
 async def get_score():
     toReturn = ""
-    if cur_num != None:
-        toReturn = cur_num
-        cur_num = None
+    if cache['num'] != None:
+        toReturn = cache['num']
+        cache['num'] = None
     return toReturn
 
 
 @web_app.post("/post_score")
 async def post_score(request: Request):
     body = await request.json()
-    cur_num = body
+    cache['num'] = body['num']
+    print(cache['num'])
 
 
 @web_app.get("/")
