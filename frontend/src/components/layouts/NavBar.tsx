@@ -69,15 +69,15 @@ export default function NavBar() {
         {RouteData.map(
           (route) =>
             (route.type === "link" && (
-              <NavBarItem key={`route-${route.path}`}>{route.name}</NavBarItem>
+              <NavBarItem key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>{route.name}</NavBarItem>
             )) ||
             (route.type === "button" && (
-              <NavBarItemButton key={`route-${route.path}`}>
+              <NavBarItemButton key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
                 {route.name}
               </NavBarItemButton>
             )) ||
             (route.type === "button-inverted" && (
-              <NavBarItemButton inverted key={`route-${route.path}`}>
+              <NavBarItemButton inverted key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
                 {route.name}
               </NavBarItemButton>
             ))
