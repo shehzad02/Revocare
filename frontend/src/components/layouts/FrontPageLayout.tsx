@@ -4,7 +4,7 @@ import NavBar from "./NavBar";
 const FrontPageLayoutContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
 `;
 
 const MainContainer = styled.div`
