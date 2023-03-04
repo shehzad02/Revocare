@@ -20,9 +20,6 @@ async def bar(arg="world"):
     return HTMLResponse(f"<h1>Hello Fast {arg}!</h1>")
 
 
-@stub.asgi(image=web_image)
+@stub.asgi(image=web_image, gpu=modal.gpu.A100(memory=20))
 def fastapi_app():
     return web_app
-
-
-stub.run()
