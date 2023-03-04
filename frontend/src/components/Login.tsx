@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { auth } from "../globals/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginContainer = styled.div`
   display: flex;
@@ -48,6 +49,9 @@ const Login = () => {
 
   const [loginErrors, setLoginErrors] = useState<string>("");
 
+  const nav = useNavigate()
+
+  
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -56,8 +60,8 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(`User ${user?.email} signed in!`);
-          setLoginErrors("")
+          
+          nav("/play");
           // ...
         })
         .catch((error) => {
