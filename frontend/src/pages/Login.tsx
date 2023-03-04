@@ -1,28 +1,14 @@
 import styled from "styled-components";
 import FrontPageLayout from "../components/layouts/FrontPageLayout";
+import Login from "../components/Login";
 
 import { auth } from "../globals/firebase";
 
 
-export default function Login() {
-
-  const Test = styled.div``;
-
-  // createUserWithEmailAndPassword(auth, email, password)
-  // .then((userCredential) => {
-  //   // Signed in 
-  //   const user = userCredential.user;
-  //   // ...
-  // })
-  // .catch((error) => {
-  //   const errorCode = error.code;
-  //   const errorMessage = error.message;
-  //   // ..
-  // });
-
+export default function LoginBoom() {
   return (
     <FrontPageLayout>
-      <Test>we ball</Test>
+      <Login />
     </FrontPageLayout>
   );
 }

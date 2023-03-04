@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import styled from "styled-components";
-import firebase from 'firebase/app';
 
 import { auth } from "../globals/firebase";
-import NavBar from "./layouts/NavBar";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const FrontPageLayoutContainer = styled.div`
@@ -32,7 +30,7 @@ const SignUpForm = styled.form`
 `;
 
 const SignUpHeader = styled.h2`
-color: white;
+  color: white;
 `;
 
 const Input = styled.input`
@@ -52,20 +50,30 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
+const ErrorMessages = styled.div`
+  color: red;
+`;
+
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [signUpErrors, setSignUpErrors] = useState<string>("");
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            console.log(`User ${user?.email} signed up!`)
-            // ...
-        }).catch((error) => {
-            console.log(error)
-        });
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed up
+        const user = userCredential.user;
+        console.log(`User ${user?.email} signed up!`);
+        setSignUpErrors("");
+        // ...
+      })
+      .catch((error) => {
+        console.log(error);
+        setSignUpErrors(error.message);
+      });
   };
 
   return (
@@ -85,6 +93,7 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button type="submit">Sign Up</Button>
+        <ErrorMessages>{signUpErrors}</ErrorMessages>
       </SignUpForm>
     </SignUpContainer>
   );
