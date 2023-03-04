@@ -6,7 +6,7 @@ const Test = styled.div``;
 export default function Home() {
   return (
     <FrontPageLayout>
-      <Test>test</Test>
+      <Test>test haha this is the main everything catch all page</Test>
     </FrontPageLayout>
   );
 }
