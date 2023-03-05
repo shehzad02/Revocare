@@ -1,6 +1,9 @@
 import { ReactNode, useLayoutEffect } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import Home from "../pages/Home";
+import Signup from "../pages/Signup"
+import Login from "../pages/Login"
+import { Play } from "../pages/Play";
 
 const ScrollToTop = (props: { children: ReactNode }) => {
   const location = useLocation();
@@ -17,6 +20,9 @@ export default function Router() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<Home />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/play" element={<Play />} />
         </Routes>
       </ScrollToTop>
     </BrowserRouter>
