@@ -30,6 +30,16 @@ async def cur_score():
     return score_func()
 
 
+@web_app.get("/exceed_threshold")
+async def cur_thresh():
+    for i in range(len(cache)):
+        if cache[i][0] >= 13 or cache[i][1] >= 13 or cache[i][2] >= 13:
+            to_return = ["false"]
+            return json.dumps(to_return)
+    to_return = ["true"]
+    return json.dumps(to_return)
+
+
 @web_app.get("/get_score")
 async def get_score():
     return json.dumps(cache)
