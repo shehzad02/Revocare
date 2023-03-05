@@ -35,10 +35,12 @@ const NavBarItem = styled.div`
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 `;
 
-const NavBarItemButton = styled.div<{
+export const NavBarItemButton = styled.div<{
   inverted?: boolean;
 }>`
   display: flex;
@@ -54,6 +56,11 @@ const NavBarItemButton = styled.div<{
   cursor: pointer;
   border: white solid 1px;
   border-radius: 10px;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.inverted ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 255, 255, 0.1)"};
+  }
 `;
 
 export default function NavBar() {
@@ -63,11 +70,11 @@ export default function NavBar() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setHideAuth(true);
-        }
-      });
-}, [])
+      if (user) {
+        setHideAuth(true);
+      }
+    });
+  }, []);
 
   return (
     <NavBarContainer>
@@ -82,15 +89,33 @@ export default function NavBar() {
         {RouteData.map(
           (route) =>
             (route.type === "link" && (
-              <NavBarItem key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>{route.name}</NavBarItem>
+              <NavBarItem
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
+                {route.name}
+              </NavBarItem>
             )) ||
             (route.type === "button" && !hideAuth && (
-              <NavBarItemButton key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
+              <NavBarItemButton
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
                 {route.name}
               </NavBarItemButton>
             )) ||
-            (route.type === "button-inverted" && !hideAuth &&  (
-              <NavBarItemButton inverted key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
+            (route.type === "button-inverted" && !hideAuth && (
+              <NavBarItemButton
+                inverted
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
                 {route.name}
               </NavBarItemButton>
             ))
