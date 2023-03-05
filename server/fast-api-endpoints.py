@@ -12,31 +12,19 @@ web_image = modal.Image.debian_slim()
 cache = []
 
 
-def score_func():
-    num = 100
-    num *= 100
-    num /= 100
-    num *= 100
-    return num
-
-
 @web_app.post("/clear")
 async def foo(request: Request):
     cache.clear()
 
 
-@web_app.get("/cur_score")
-async def cur_score():
-    return score_func()
-
-
 @web_app.get("/exceed_threshold")
 async def cur_thresh():
     for i in range(len(cache)):
-        if cache[i][0] >= 13 or cache[i][1] >= 13 or cache[i][2] >= 13:
+        if float(cache[i][0]) >= 13 or float(cache[i][1]) >= 13 or float(cache[i][2]) >= 13:
             to_return = ["false"]
             return json.dumps(to_return)
     to_return = ["true"]
+    cache.clear()  # just gonna clear everything since this data won't end up doing anything otherwise
     return json.dumps(to_return)
 
 
@@ -53,7 +41,7 @@ async def post_score(request: Request):
 
 @web_app.get("/")
 async def bar(arg="world"):
-    return HTMLResponse(f"<h1>Hello Fast {arg}!</h1>")
+    return HTMLResponse(f"<h1>Hello {arg}!</h1>")
 
 
 @stub.asgi(image=web_image)
