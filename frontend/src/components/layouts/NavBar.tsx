@@ -70,11 +70,11 @@ export default function NavBar() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setHideAuth(true);
-        }
-      });
-}, [])
+      if (user) {
+        setHideAuth(true);
+      }
+    });
+  }, []);
 
   return (
     <NavBarContainer>
@@ -89,15 +89,33 @@ export default function NavBar() {
         {RouteData.map(
           (route) =>
             (route.type === "link" && (
-              <NavBarItem key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>{route.name}</NavBarItem>
+              <NavBarItem
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
+                {route.name}
+              </NavBarItem>
             )) ||
             (route.type === "button" && !hideAuth && (
-              <NavBarItemButton key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
+              <NavBarItemButton
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
                 {route.name}
               </NavBarItemButton>
             )) ||
-            (route.type === "button-inverted" && !hideAuth &&  (
-              <NavBarItemButton inverted key={`route-${route.path}`} onClick={()=>{navigate(route.path)}}>
+            (route.type === "button-inverted" && !hideAuth && (
+              <NavBarItemButton
+                inverted
+                key={`route-${route.path}`}
+                onClick={() => {
+                  navigate(route.path);
+                }}
+              >
                 {route.name}
               </NavBarItemButton>
             ))
