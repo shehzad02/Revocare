@@ -25,11 +25,14 @@ const WebCamContainer = styled.div`
   height: 80vh;
 `;
 
-const GreetingText = styled.h1`
+const GreetingText = styled.h1<{
+    duration: string;
+    delay: string;
+}>`
   color: white;
-  animation: fadeIn 1s;
+  animation: ${(props) => `${props.duration} fadeIn ${props.delay}`};
   font-size: 5rem;
-
+    display: none; 
   @keyframes fadeIn {
     0% {
       opacity: 0;
@@ -47,18 +50,6 @@ const BodyText = styled.p`
 export const WebcamStreamCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  setInterval(() => {
-    setStep(1);
-  }, 3000);
-
-  setInterval(() => {
-    setStep(2);
-  }, 6000);
-
-  setInterval(() => {
-    setStep(3);
-  }, 9000);
 
   const [model, setModel] = useState<poseDetection.PoseDetector>();
   const [step, setStep] = useState(0);
@@ -222,12 +213,12 @@ export const WebcamStreamCapture = () => {
 
   return (
     <WebCamContainer>
-          <GreetingText>Hi there!</GreetingText>
-          <GreetingText>Welcome to the Revocare Training Center!</GreetingText>
-          <GreetingText>
+          <GreetingText duration="1s" delay="0s">Hi there!</GreetingText>
+          <GreetingText duration="3s" delay="2s">Welcome to the Revocare Training Center!</GreetingText>
+          <GreetingText duration="4s" delay="4.5s">
             First you'll need to select an exercises to practice!
           </GreetingText>
-          <GreetingText></GreetingText>
+          
         
     
       {step === 3 && (
