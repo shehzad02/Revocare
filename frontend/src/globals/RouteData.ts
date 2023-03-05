@@ -10,12 +10,12 @@ export const RouteData = [
     type: "link",
   },
   {
-    path: "signup",
+    path: "/signup",
     name: "Sign Up",
     type: "button-inverted",
   },
   {
-    path: "login",
+    path: "/login",
     name: "Login",
     type: "button",
   },
