@@ -182,6 +182,7 @@ export const WebcamStreamCapture = () => {
         if (poses && poses.length > 0) {
           for (const pose of poses) {
             if (pose.keypoints != null) {
+              console.log(pose.keypoints)
               drawKeypoints(pose.keypoints, ctx);
               drawSkeleton(pose.keypoints, ctx);
             }
