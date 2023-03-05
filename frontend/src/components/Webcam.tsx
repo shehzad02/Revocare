@@ -93,6 +93,10 @@ const GuideImage = styled.img`
   animation: fadeIn 1sec ease-in-out forwards;
 `;
 
+const WarningText = styled.p`
+  color: red;
+`;
+
 export const WebcamStreamCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -268,6 +272,22 @@ export const WebcamStreamCapture = () => {
     "Tiger 1",
   ];
 
+  const [slowDown, setSlowDown] = useState<boolean>(false);
+
+  setTimeout(() => {
+    if (step === 2)
+      fetch("http://localhost:5000/stop", {
+        method: "GET",
+      }).then(async (res) => {
+        if (res.status === 200) {
+          const body = await res.json();
+          setSlowDown(body.slowDown);
+        } else {
+          throw new Error("Something went wrong");
+        }
+      });
+  }, 1000);
+
   return (
     <WebCamContainer>
       <div style={{ width: "500px", textAlign: "center" }}>
@@ -337,19 +357,22 @@ export const WebcamStreamCapture = () => {
           </>
         )}
         {step === 2 && (
-          <div
-            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
-          >
-            <FadeInDiv length="10sec">
-              {" "}
-              <Video ref={videoRef} autoPlay playsInline muted />
-              <Canvas ref={canvasRef} />
-              <button onClick={() => setIsVideoActive(!isVideoActive)}>
-                {!isVideoActive ? "Turn on" : "Turn off"}
-              </button>
-            </FadeInDiv>
-            <GuideImage src={imageMap[selectedExercise]} />
-          </div>
+          <>
+            <div
+              style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+            >
+              <FadeInDiv length="10sec">
+                {" "}
+                <Video ref={videoRef} autoPlay playsInline muted />
+                <Canvas ref={canvasRef} />
+                <button onClick={() => setIsVideoActive(!isVideoActive)}>
+                  {!isVideoActive ? "Turn on" : "Turn off"}
+                </button>
+              </FadeInDiv>
+              <GuideImage src={imageMap[selectedExercise]} />
+            </div>
+            <WarningText>{slowDown ? "Slow down!" : ""}</WarningText>
+          </>
         )}
       </div>
     </WebCamContainer>

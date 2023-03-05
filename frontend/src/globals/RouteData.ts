@@ -10,6 +10,11 @@ export const RouteData = [
     type: "link",
   },
   {
+    path: "/train",
+    name: "Train",
+    type: "link",
+  },
+  {
     path: "/signup",
     name: "Sign Up",
     type: "button-inverted",
