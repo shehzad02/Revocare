@@ -276,12 +276,15 @@ export const WebcamStreamCapture = () => {
 
   setTimeout(() => {
     if (step === 2)
-      fetch("http://localhost:5000/stop", {
-        method: "GET",
-      }).then(async (res) => {
+      fetch(
+        "https://bennycortese--zoom-fastapi-app.modal.run/exceed_threshold",
+        {
+          method: "GET",
+        }
+      ).then(async (res) => {
         if (res.status === 200) {
           const body = await res.json();
-          setSlowDown(body.slowDown);
+          setSlowDown(!body["thresh"]);
         } else {
           throw new Error("Something went wrong");
         }
