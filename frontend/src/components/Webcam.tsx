@@ -2,19 +2,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import "@tensorflow/tfjs-backend-webgl";
 import styled from "styled-components";
+import { NavBarItemButton } from "./layouts/NavBar";
+import { imageMap } from "../globals/imageMap";
 
 const Video = styled.video`
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
   visibility: hidden;
   position: absolute;
-  width: 1800px;
-  height: 800px;
+  width: 900px;
+  height: 400px;
 `;
 
 const Canvas = styled.canvas`
-  width: 1800px;
-  height: 800px;
+  // 1800px
+  // 800px
+  width: 900px;
+  height: 400px;
 `;
 
 const WebCamContainer = styled.div`
@@ -25,26 +29,68 @@ const WebCamContainer = styled.div`
   height: 80vh;
 `;
 
-const GreetingText = styled.h1<{
-    duration: string;
-    delay: string;
+const FadeInLabel = styled.h1<{
+  length: string;
 }>`
   color: white;
-  animation: ${(props) => `${props.duration} fadeIn ${props.delay}`};
-  font-size: 5rem;
-    display: none; 
   @keyframes fadeIn {
-    0% {
+    from {
       opacity: 0;
     }
-    100% {
+    to {
       opacity: 1;
     }
   }
+
+  animation: fadeIn ${(props) => props.length} ease-in-out forwards;
+`;
+
+const StyledDropDown = styled.select`
+  background-color: #f2f2f2;
+  border: none;
+  color: black;
+
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  width: 200px;
+  height: 50px;
+  font-size: 1.5rem;
 `;
 
 const BodyText = styled.p`
   color: white;
+`;
+
+const FadeInDiv = styled.div<{
+  length: string;
+}>`
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: fadeIn ${(props) => props.length} ease-in-out forwards;
+`;
+
+const GuideImage = styled.img`
+  height: 400px;
+  width: 100%;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: fadeIn 1sec ease-in-out forwards;
 `;
 
 export const WebcamStreamCapture = () => {
@@ -52,7 +98,8 @@ export const WebcamStreamCapture = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [model, setModel] = useState<poseDetection.PoseDetector>();
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState<number>(0);
+  const [selectedExercise, setSelectedExercise] = useState<number>(0);
 
   const loadModel = useCallback(async () => {
     const model = await poseDetection.createDetector(
@@ -211,26 +258,100 @@ export const WebcamStreamCapture = () => {
     }
   }
 
+  const mapExercises = [
+    "Bird 1",
+    "Bird 2",
+    "Bear 1",
+    "Deer 1",
+    "Monkey 1",
+    "Monkey 2",
+    "Tiger 1",
+  ];
+
   return (
     <WebCamContainer>
-          <GreetingText duration="1s" delay="0s">Hi there!</GreetingText>
-          <GreetingText duration="3s" delay="2s">Welcome to the Revocare Training Center!</GreetingText>
-          <GreetingText duration="4s" delay="4.5s">
-            First you'll need to select an exercises to practice!
-          </GreetingText>
-          
-        
-    
-      {step === 3 && (
-        <>
-          {" "}
-          <Video ref={videoRef} autoPlay playsInline muted />
-          <Canvas ref={canvasRef} />
-          <button onClick={() => setIsVideoActive(!isVideoActive)}>
-            {!isVideoActive ? "Turn on" : "Turn off"}
-          </button>
-        </>
-      )}
+      <div style={{ width: "500px", textAlign: "center" }}>
+        {step === 0 && selectedExercise !== -1 && (
+          <>
+            <FadeInLabel length="2s">Hi there!</FadeInLabel>
+            <FadeInLabel length="5s">
+              Welcome to the Revocare Training Center!
+            </FadeInLabel>
+            <FadeInLabel length="6s">
+              This tool is designed to help you practice exercises that are
+              clinically proven to improve your tremors!
+            </FadeInLabel>
+            <FadeInLabel length="9s">
+              First you'll need to select an exercise to practice.
+            </FadeInLabel>
+            <FadeInDiv length="10s">
+              <StyledDropDown
+                onChange={(e) => {
+                  setSelectedExercise(parseInt(e.target.value));
+                  setStep(1);
+                }}
+              >
+                <option value="-1"></option>
+                <option value="0">Bird 1</option>
+                <option value="1">Bird 2</option>
+                <option value="2">Bear 1</option>
+                <option value="3">Deer 1</option>
+                <option value="4">Monkey 1</option>
+                <option value="5">Monkey 2</option>
+                <option value="6">Tiger 1</option>
+              </StyledDropDown>
+            </FadeInDiv>
+          </>
+        )}
+
+        {step === 1 && selectedExercise !== -1 && (
+          <>
+            <FadeInLabel length="3s">
+              You have selected {mapExercises[selectedExercise]}
+            </FadeInLabel>
+            <FadeInLabel length="5s">
+              To perform each exercise, start from rest and as smooth as you can
+              try to hold the position displayed on the screen for 7 seconds
+              while breathing in.
+            </FadeInLabel>
+            <FadeInLabel length="7s">
+              Repeat this and rest in between for a second. You can use the
+              video feed to help you with your form.
+            </FadeInLabel>
+            <FadeInDiv
+              length="10s"
+              style={{
+                height: "90px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <NavBarItemButton
+                onClick={() => {
+                  setStep(2);
+                }}
+              >
+                Click Here to Continue
+              </NavBarItemButton>
+            </FadeInDiv>
+          </>
+        )}
+        {step === 2 && (
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <FadeInDiv length="10sec">
+              {" "}
+              <Video ref={videoRef} autoPlay playsInline muted />
+              <Canvas ref={canvasRef} />
+              <button onClick={() => setIsVideoActive(!isVideoActive)}>
+                {!isVideoActive ? "Turn on" : "Turn off"}
+              </button>
+            </FadeInDiv>
+            <GuideImage src={imageMap[selectedExercise]} />
+          </div>
+        )}
+      </div>
     </WebCamContainer>
   );
 };
