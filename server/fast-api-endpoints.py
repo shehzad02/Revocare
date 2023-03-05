@@ -21,11 +21,12 @@ async def foo(request: Request):
 async def cur_thresh():
     for i in range(len(cache)):
         if float(cache[i][0]) >= 13 or float(cache[i][1]) >= 13 or float(cache[i][2]) >= 13:
-            to_return = ["false"]
-            return json.dumps(to_return)
-    to_return = ["true"]
+            to_return = '{"thresh":"false"}'
+            cache.clear()
+            return json.loads(to_return)
+    to_return = '{"thresh":"true"}'
     cache.clear()  # just gonna clear everything since this data won't end up doing anything otherwise
-    return json.dumps(to_return)
+    return json.loads(to_return)
 
 
 @web_app.get("/get_score")
