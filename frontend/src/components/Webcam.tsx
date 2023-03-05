@@ -18,18 +18,50 @@ const Canvas = styled.canvas`
 `;
 
 const WebCamContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+`;
+
+const GreetingText = styled.h1`
+  color: white;
+  animation: fadeIn 1s;
+  font-size: 5rem;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
+
+const BodyText = styled.p`
+  color: white;
 `;
 
 export const WebcamStreamCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  setInterval(() => {
+    setStep(1);
+  }, 3000);
+
+  setInterval(() => {
+    setStep(2);
+  }, 6000);
+
+  setInterval(() => {
+    setStep(3);
+  }, 9000);
+
   const [model, setModel] = useState<poseDetection.PoseDetector>();
+  const [step, setStep] = useState(0);
 
   const loadModel = useCallback(async () => {
     const model = await poseDetection.createDetector(
@@ -118,33 +150,26 @@ export const WebcamStreamCapture = () => {
     }
   }
 
-
   const [isVideoActive, setIsVideoActive] = useState(false);
 
-  async function init(){
+  async function init() {
     await activateVideo();
-  };
+  }
 
   async function closeVideo() {
     const video = videoRef.current;
-        if (video) {
-            const stream = video.srcObject;
-            if(stream instanceof MediaStream)
-            stream.getTracks().forEach(track => track.stop());
-            video.srcObject = null;
-        }
+    if (video) {
+      const stream = video.srcObject;
+      if (stream instanceof MediaStream)
+        stream.getTracks().forEach((track) => track.stop());
+      video.srcObject = null;
     }
-
+  }
 
   useEffect(() => {
-    if(isVideoActive)
-        init();
-    else
-        closeVideo();
+    if (isVideoActive) init();
+    else closeVideo();
   }, [isVideoActive]);
-
-
-
 
   async function activateVideo() {
     const video = videoRef.current;
@@ -197,9 +222,24 @@ export const WebcamStreamCapture = () => {
 
   return (
     <WebCamContainer>
-      <Video ref={videoRef} autoPlay playsInline muted />
-      <Canvas ref={canvasRef} />
-      <button onClick={() => setIsVideoActive(!isVideoActive)}>{!isVideoActive? "Turn on" : "Turn off"}</button>
+          <GreetingText>Hi there!</GreetingText>
+          <GreetingText>Welcome to the Revocare Training Center!</GreetingText>
+          <GreetingText>
+            First you'll need to select an exercises to practice!
+          </GreetingText>
+          <GreetingText></GreetingText>
+        
+    
+      {step === 3 && (
+        <>
+          {" "}
+          <Video ref={videoRef} autoPlay playsInline muted />
+          <Canvas ref={canvasRef} />
+          <button onClick={() => setIsVideoActive(!isVideoActive)}>
+            {!isVideoActive ? "Turn on" : "Turn off"}
+          </button>
+        </>
+      )}
     </WebCamContainer>
   );
 };
