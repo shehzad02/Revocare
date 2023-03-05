@@ -125,9 +125,22 @@ export const WebcamStreamCapture = () => {
     await activateVideo();
   };
 
+  async function closeVideo() {
+    const video = videoRef.current;
+        if (video) {
+            const stream = video.srcObject;
+            if(stream instanceof MediaStream)
+            stream.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+        }
+    }
+
+
   useEffect(() => {
     if(isVideoActive)
         init();
+    else
+        closeVideo();
   }, [isVideoActive]);
 
 
